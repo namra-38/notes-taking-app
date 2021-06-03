@@ -19,6 +19,12 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+
+CUSTOM_APPS = [
+  'accounts.apps.AccountsConfig',
+  'notes.apps.NotesConfig',
+]
+
 BUILTIN_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,16 +34,13 @@ BUILTIN_APPS = [
     'django.contrib.staticfiles',
 ]
 
-CUSTOM_APPS = [
-  'accounts.apps.AccountsConfig',
-  'notes.apps.NotesConfig',
-]
-
 THIRD_PARTY_APPS = [
   'bootstrap_modal_forms',
 ]
 
 INSTALLED_APPS = CUSTOM_APPS + BUILTIN_APPS + THIRD_PARTY_APPS
+
+AUTH_USER_MODEL = "accounts.Account"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
