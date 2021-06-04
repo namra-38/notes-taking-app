@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page</title>
+</head>
+<body>
+  <h1>Welcome to home page
+    <a href="{% url 'accounts:password_change' %}" style="float: right; font-size: 20px;">Change Password</a>
+  </h1>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt nisi rem dolores obcaecati autem, quo minus harum assumenda pariatur sed eveniet sit mollitia fuga voluptate culpa ratione unde atque nemo dolore? Nesciunt nulla perspiciatis magni reprehenderit a itaque quisquam ea debitis quidem placeat rem, est architecto, eius eum? Delectus, facere reprehenderit dignissimos rem ratione sunt magni nemo odit facilis earum pariatur ipsum. Nobis explicabo nisi itaque aperiam quibusdam omnis minima?</p>
+  {% if request.user.is_authenticated %}
+    <a href="{% url 'accounts:logout' %}">Logout</a>
+  {% endif %}
+</body>
+</html>
