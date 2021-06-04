@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import PasswordChangeForm
 from django.http import HttpResponse, JsonResponse
 from .forms import LoginForm, SignUpForm
 from .models import Account
@@ -14,11 +15,15 @@ def login_view(request):
       password = form.cleaned_data['password']
       user = authenticate(username=username, password=password)
       login(request, user)
-      return HttpResponse('<h1> Welcome to homepage </h1>')
+      return redirect('accounts:home_page')
 
   template_name = 'accounts/authentications/login.html'
   context = {'form': form}
   return render(request, template_name, context)
+
+def logout_view(request):
+  logout(request)
+  return redirect('accounts:login')  
 
 def signup_view(request):
   form = SignUpForm()
@@ -40,3 +45,21 @@ def check_username_validity(request):
     if Account.objects.filter(username=request.POST['username']).exists():
       return JsonResponse({'message': 'Username already taken', 'class': 'danger'})
     return JsonResponse({'message': 'Username available', 'class': 'success'})
+
+def password_change_view(request):
+  form = PasswordChangeForm(request.user)
+  if request.method == 'POST':
+    form = PasswordChangeForm(request.user, request.POST)
+    if form.is_valid():
+      form.save()
+      logout(request)
+      return redirect('accounts:login')
+
+  template_name = 'accounts/authentications/password_change_form.html'
+  context = {'form': form}
+  return render(request, template_name, context)
+
+
+def home_view(request):
+  return render(request, 'accounts/home.html')    
+
