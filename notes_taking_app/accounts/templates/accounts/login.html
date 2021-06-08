@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load socialaccount %}
+
+{% block title %} Login {% endblock %}
+
+{% block content %}
+  <style>
+    .input-group-text{
+      background-color: white;
+      border-left: none;
+      height: 38px;
+    }
+    .input-group-text input[type='checkbox']{
+      display: none;
+    }
+    #id_password{
+      border-right: none;
+    }
+    #show_button{
+      cursor: pointer;
+    }
+  </style>
+
+  <div class="card mx-auto mt-2 p-3" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 10px; height: 610px; width: 30rem;">
+    <div class="card-body">
+      <h3 class="text-center">Login To Your Account</h3>
+
+      {% get_providers as socialaccount_providers %}
+			{% if socialaccount_providers %}
+				<div class="socialaccount_ballot">
+				  <ul class="socialaccount_providers">
+				    {% include "account/provider_list.html" with process="login" %}
+				  </ul>
+				</div>
+
+			<p class="text-center">-- OR --</p>
+
+      {% for error in form.non_field_errors %}
+        <div class="text-danger">
+          {{ error }}
+        </div>
+      {% endfor %}
+
+      <form action="." method="POST" class="mt-5">
+        {% csrf_token %}  
+        {% for field in form %}
+          <div>
+            {% if field.id_for_label == 'id_password' %}
+              <div class="input-group w-75 mb-3">
+                {{ field }}
+                <div class="input-group-text">
+                  <label id="show_button">
+                    <input class="form-check-input mt-0" type="checkbox" id="show_pass" value="" aria-label="Checkbox for following text input"> 
+                    <i id="password-icon-container" class="fas fa-eye text-secondary password-icon"></i>
+                  </label>
+                </div>
+              </div>
+            {% else %}
+            <div class="input-group w-75 mb-1">
+              {{ field }}  
+            {% endif %}
+          </div>
+        {% endfor %}
+        <a href="{% url 'accounts:password_reset' %}" class="float-end"><small>forgot password?</small></a>
+        <br>
+        <div class="text-center"><input type="submit" value="Login" class="btn btn-primary mt-4 w-25"></div>
+      </form>
+      <p class="text-center mt-4">
+        <small>Don't have an account?</small>
+        <a href="{% url 'accounts:signup' %}">SignUp</a>
+      </p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+  <script>
+    document.body.style.backgroundImage = "url({% static 'media/utility_images/back3.jpg' %})";
+    document.body.style.backgroundPosition ="center";
+    document.body.style.backgroundSize = "cover";
+
+
+    document.querySelector("#show_pass").addEventListener('click', togglePassword);
+    const password_field = document.querySelector("#id_password");
+    const icon_container = document.querySelector("#password-icon-container");
+
+    function togglePassword(event) {
+      if(event.target.checked) {
+        password_field.type = "text";
+        icon_container.className = "fas fa-eye-slash text-secondary";  
+      }
+      else {
+        password_field.type = "password"
+        icon_container.className = "fas fa-eye text-secondary";
+      }
+    }
+  </script>
+{% endblock %} 
