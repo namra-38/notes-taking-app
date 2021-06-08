@@ -50,10 +50,8 @@ LOGIN_REDIRECT_URL = '/accounts/home/'
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
-    # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
-
-    # `allauth` specific authentication methods, such as login by e-mail
+    'accounts.authentication.EmailAuthBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
